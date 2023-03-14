@@ -17,6 +17,8 @@ def pop_stddev(arr):
 
 
 def sample_stddev(arr):
+    if len(arr) == 1:
+        return 0
     mu = mean(arr)
     return math.sqrt(sum([(x - mu) ** 2 for x in arr]) / (len(arr) - 1))
 

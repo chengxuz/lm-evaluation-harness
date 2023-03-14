@@ -41,11 +41,13 @@ class HFLM(BaseLM):
         self.gpt2.eval()
 
         # pretrained tokenizer for neo is broken for now so just hard-coding this to gpt2
+        token_kwargs = {}
+        if subfolder is not None:
+            token_kwargs['subfolder'] = subfolder
         self.tokenizer = transformers.AutoTokenizer.from_pretrained(
             pretrained if tokenizer is None else tokenizer,
             revision=revision,
-            subfolder=subfolder,
-        )
+            **token_kwargs)
 
         assert isinstance(
             self.tokenizer,
@@ -61,7 +63,7 @@ class HFLM(BaseLM):
 
         if isinstance(
             self.tokenizer, (transformers.GPT2Tokenizer, transformers.GPT2TokenizerFast)
-        ):
+        ) and pretrained == 'gpt2':
             assert self.tokenizer.encode("hello\n\nhello") == [
                 31373,
                 198,
